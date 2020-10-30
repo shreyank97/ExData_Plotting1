@@ -1,0 +1,10 @@
+library(dplyr)
+read <- read.table("household_power_consumption.txt", header = TRUE, sep = ";", na.strings = "?")
+data <- read[read$Date %in% c("1/2/2007", "2/2/2007"),]
+rm(read)
+data <- data %>% mutate(Date = as.Date(Date, "%d/%m/%Y"))
+TD <- paste(data$Date, data$Time)
+data$Time <- strptime(TD, "%Y-%m-%d %H:%M:%S")
+png(filename = "plot2.png")
+with(data, plot(Time, Global_active_power, xlab = "", ylab = "Global Active Power (killowatts)", type = "l"))
+dev.off()
